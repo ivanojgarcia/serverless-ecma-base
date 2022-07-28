@@ -1,0 +1,30 @@
+  # **** Name Tables ****
+  NameDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    DeletionPolicy: Retain # Prevents a table from being dropped by mistake
+    Properties:
+      TableName: ${self:provider.environment.EXAMPLE_TABLE}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: nameId
+          AttributeType: S
+        - AttributeName: secondId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: nameId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: secondIndex
+          KeySchema:
+            - AttributeName: secondId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      StreamSpecification:
+          StreamViewType: NEW_IMAGE

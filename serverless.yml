@@ -1,0 +1,58 @@
+service: serverless-ecma-base
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+frameworkVersion: '3'
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  # iamRoleStatements:
+  #   - ${file(src/iam/ExampleDynamoIAM.yml):ExampleDynamoIAM}
+  #   - ${file(src/iam/ExampleSqsIAM.yml):ExampleSqsIAM}
+
+  environment:
+    STAGE: ${file(src/config/config.${self:provider.stage}.json):STAGE}
+    ACCOUNT_ID: ${aws:accountId}
+    REGION: ${aws:region}
+    # STREAM_ARN: 123
+    # EXAMPLE_TABLE: table-dynamodb-${opt:stage, self:provider.stage}-example
+    # SQS_QUEUE:
+      # Ref: ExampleQueue
+    # SQS_QUEUE_NAME: ExampleQueue-${self:provider.stage}
+
+# resources:
+  # Resources:
+    # NameDBTable: ${file(src/resources/ExampleTable.yml):NameDBTable}
+    # ExampleQueue: ${file(src/resources/SqsQueue.yml):ExampleQueue}
+    # DeadLetterExampleQueue: ${file(src/resources/SqsDlqQueue.yml):DeadLetterExampleQueue}
+
+functions:
+  # Example with SQS and Streams
+  # auth:
+  #   handler: src/middleware/auth.handler
+  # sqsName:
+  #   handler: src/functions/sqsName.handler
+  #   events:
+  #     - sqs:
+  #         arn: arn:aws:sqs:${self:provider.region}:${self:provider.environment.ACCOUNT_ID}:Name-${self:provider.stage}.fifo
+  #         batchSize: 1 #max Size 10
+  # serviceProcessStreams:
+  #   handler: src/functions/serviceStreams.handler
+  #   events:
+  #     - stream: 
+  #         type: dynamodb
+  #         batchSize: 1
+  #         startingPosition: LATEST
+  #         arn: "arn:aws:dynamodb:${self:provider.region}:${self:provider.environment.ACCOUNT_ID}:table/prefix-dynamodb-${self:provider.stage}-name/stream/${self:provider.environment.STREAM_ARN}"
+  check:
+    handler: src/handler/check.handler
+    events:
+      - http:
+          method: get
+          path: check

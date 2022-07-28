@@ -1,0 +1,8 @@
+DeadLetterExampleQueue:
+  Type: AWS::SQS::Queue
+  Properties:
+    QueueName: ${self:provider.environment.SQS_QUEUE_NAME}-dl.fifo
+    FifoQueue: true
+    ContentBasedDeduplication: true
+    DelaySeconds: 0
+    MaximumMessageSize: 262144

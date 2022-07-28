@@ -1,0 +1,14 @@
+ExampleQueue:
+  Type: AWS::SQS::Queue
+  Properties:
+      QueueName: ${self:provider.environment.SQS_QUEUE_NAME}.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      DelaySeconds: 0
+      MaximumMessageSize: 262144
+      RedrivePolicy: 
+        deadLetterTargetArn: 
+          Fn::GetAtt: 
+            - DeadLetterExamQueue
+            - Arn
+        maxReceiveCount: 5

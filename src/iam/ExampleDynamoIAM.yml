@@ -1,0 +1,13 @@
+ ExampleDynamoIAM:
+  Effect: Allow
+  Action:
+    - dynamodb:Query
+    - dynamodb:Scan
+    - dynamodb:GetItem
+    - dynamodb:PutItem
+    - dynamodb:UpdateItem
+    - dynamodb:BatchWriteItem
+  Resource:
+    - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.EXAMPLE_TABLE}"
+    - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.EXAMPLE_TABLE}/*"
+    
