@@ -1,4 +1,4 @@
-# sls-base
+# Serverless Custom Template
 
 ![alt text](assets/serverless-logo.png)
 
